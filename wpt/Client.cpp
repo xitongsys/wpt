@@ -30,23 +30,29 @@ bool Client::start() {
 	u_long mode = 1;
 	ioctlsocket(sk, FIONBIO, &mode);
 
-
 	std::thread send_thread(&Client::send, this);
 	std::thread recv_thread(&Client::recv, this);
+	std::thread heartbeat_thread(&Client::heartbeat, this);
 
+	heartbeat_thread.join();
 	send_thread.join();
 	recv_thread.join();
 }
 
+void Client::heartbeat() {
+	while (true) {
+		sendto(sk, send_buf, 2, 0, (sockaddr*)& server_sk_info, sizeof(sockaddr));
+		Sleep(1000 * 10);
+	}
+}
+
 void Client::send() {
 	while (true) {
-		//vector<uint8_t> data = tun->read();
-		vector<uint8_t> data = {'h','h'};
+		vector<uint8_t> data = tun->read();
 		if (data.size() > 0 && data.size() < BUFFSIZE) {
 			for (int i = 0; i < data.size(); i++) {
 				send_buf[i] = data[i];
 			}
-			int a = sendto(sk, send_buf, 2, 0, (sockaddr*)& server_sk_info, sizeof(sockaddr));
 
 			Frame frame;
 			if (frame.read(3, (uint8_t*)send_buf, BUFFSIZE) <= 0) continue;
@@ -64,7 +70,8 @@ void Client::recv() {
 		if (rl > 0) {
 			Frame frame;
 			if (frame.read(3, (uint8_t*)recv_buf, rl) <= 0) continue;
-			frame.ipv4.dst = str2ip("127.0.0.1");
+			frame.ipv4.dst = config->gateway->addr;
+
 			if (frame.ipv4.protocol == UDPID) {
 				frame.udp.dst_port = config->port;
 			}
@@ -80,7 +87,7 @@ void Client::recv() {
 			for (int i = 0; i < wn; i++) {
 				data.push_back(recv_buf[i]);
 			}
-			tun->write(data);
+			tun->write(data, 0);
 		}
 	}
 }

@@ -29,7 +29,7 @@ vector<uint8_t> Tun::read() {
 	return res;
 }
 
-bool Tun::write(vector<uint8_t>& data) {
+bool Tun::write(vector<uint8_t>& data, int isout) {
 	for (int i = 0; i < data.size(); i++) {
 		write_buf[i] = data[i];
 	}
@@ -40,7 +40,7 @@ bool Tun::write(vector<uint8_t>& data) {
 	addr.Layer = WINDIVERT_LAYER_NETWORK;
 	addr.Impostor = 1;
 	addr.Loopback = 0;
-	addr.Outbound = 0;
+	addr.Outbound = isout;
 	addr.IPChecksum = 1;
 	addr.TCPChecksum = 1;
 	addr.UDPChecksum = 1;
@@ -51,9 +51,9 @@ bool Tun::write(vector<uint8_t>& data) {
 }
 
 bool Tun::start() {
-	char fmt[] = "(localPort == %d or remotePort == %d) and !loopback and ifIdx == %d and !impostor";
+	char fmt[] = "(localPort == %d or remotePort == %d) and !impostor";
 	char filter[1024];
-	sprintf_s(filter, 1024, fmt, config->port, config->port, config->if_index);
+	sprintf_s(filter, 1024, fmt, config->port, config->port);
 	handle = WinDivertOpen(filter, WINDIVERT_LAYER_NETWORK, 0, 0);
 	return !(handle == INVALID_HANDLE_VALUE);
 }

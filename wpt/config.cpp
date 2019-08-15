@@ -12,8 +12,8 @@ Config::Config(string fname) {
 	server = j.value("server", "0.0.0.0");
 	port = atoi(j.value("port", "3389").c_str());
 	udp_port = atoi(j.value("udp_port", "2222").c_str());
-
-	if_index = 0;
+	gateway = route.getRoute(str2ip(server));
+	if_index = gateway->ifIndex;
 }
 
 string Config::to_string() {

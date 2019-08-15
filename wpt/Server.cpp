@@ -47,7 +47,7 @@ void Server::send() {
 			if (frame.read(3, (uint8_t*)send_buf, BUFFSIZE) <= 0) continue;
 			if (frame.tcp.dst_port != config->port && frame.udp.dst_port != config->port) continue;
 			int wn = frame.write(3, (uint8_t*)send_buf, BUFFSIZE);
-			sendto(sk, send_buf, wn, 0, (sockaddr*)& client_sk_info, sizeof(sockaddr));
+			int sn = sendto(sk, send_buf, wn, 0, (sockaddr*)& client_sk_info, sizeof(sockaddr));
 		}
 	}
 }
@@ -57,10 +57,10 @@ void Server::recv() {
 	while (true) {
 		int rl = recvfrom(sk, recv_buf, BUFFSIZE, 0, (sockaddr*)& client_sk_info, &len);
 		if (rl > 0) {
-			std::cout << rl << std::endl;
 			Frame frame;
 			if (frame.read(3, (uint8_t*)recv_buf, rl) <= 0) continue;
 			frame.ipv4.src = config->route.getRoute(frame.ipv4.dst)->addr;
+
 			if (frame.ipv4.protocol == UDPID) {
 				frame.udp.src_port = config->port;
 			}
@@ -76,7 +76,8 @@ void Server::recv() {
 			for (int i = 0; i < wn; i++) {
 				data.push_back(recv_buf[i]);
 			}
-			tun->write(data);
+
+			tun->write(data, 1);
 		}
 	}
 }

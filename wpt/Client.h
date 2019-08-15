@@ -25,5 +25,6 @@ public:
 	bool start();
 	void send();
 	void recv();
+	void heartbeat();
 };
 

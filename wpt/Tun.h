@@ -23,5 +23,5 @@ public:
 	bool start();
 	bool stop();
 	vector<uint8_t> read();
-	bool write(vector<uint8_t>& data);
+	bool write(vector<uint8_t>& data, int isout);
 };
