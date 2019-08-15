@@ -26,7 +26,7 @@ Route::Route() {
 	DWORD dwSize = 0, dwRetVal = 0;
 	pTable = (MIB_IPFORWARDTABLE*)malloc(sizeof(MIB_IPFORWARDTABLE));
 	if (pTable == NULL) {
-		cout << "error allocating memory" << endl;
+		std::cout << "error allocating memory" << std::endl;
 		exit(-1);
 	}
 
@@ -34,7 +34,7 @@ Route::Route() {
 		free(pTable);
 		pTable = (MIB_IPFORWARDTABLE*)malloc(dwSize);
 		if (pTable == NULL) {
-			cout << "error allocating memory" << endl;
+			std::cout << "error allocating memory" << std::endl;
 			exit(-1);
 		}
 	}
@@ -53,7 +53,7 @@ Route::Route() {
 	}
 	else {
 		free(pTable);
-		cout << "get route table error" << endl;
+		std::cout << "get route table error" << std::endl;
 		exit(-1);
 	}
 
@@ -63,7 +63,7 @@ Route::Route() {
 	ULONG len = sizeof(IP_ADAPTER_INFO);
 	p_adapter_info = (IP_ADAPTER_INFO*)malloc(sizeof(IP_ADAPTER_INFO));
 	if (p_adapter_info == NULL) {
-		cout << "can't get adapter info" << endl;
+		std::cout << "can't get adapter info" << std::endl;
 		exit(-1);
 	}
 
@@ -71,7 +71,7 @@ Route::Route() {
 		free(p_adapter_info);
 		p_adapter_info = (IP_ADAPTER_INFO*)malloc(len);
 		if (p_adapter_info == NULL) {
-			cout << "can't get adapter info" << endl;
+			std::cout << "can't get adapter info" << std::endl;
 			exit(-1);
 		}
 	}
@@ -92,7 +92,7 @@ Route::Route() {
 	}
 	else {
 		free(p_adapter_info);
-		cout << "can't get adapter info" << endl;
+		std::cout << "can't get adapter info" << std::endl;
 		exit(-1);
 	}
 

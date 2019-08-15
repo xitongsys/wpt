@@ -4,7 +4,6 @@
 #include "json.hpp"
 #include "route.h"
 #include "ethernet/include/util.h"
-using namespace std;
 
 class Config {
 public:

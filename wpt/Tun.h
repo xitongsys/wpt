@@ -8,7 +8,6 @@
 #include "ethernet/include/util.h"
 #include "ethernet/include/const.h"
 #include "config.h"
-using namespace std;
 
 class Tun {
 public:

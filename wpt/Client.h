@@ -4,6 +4,7 @@
 #include "config.h"
 #include "Tun.h"
 #include <thread>
+#include <iostream>
 
 class Client{
 public:

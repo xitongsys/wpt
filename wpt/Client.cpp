@@ -31,8 +31,8 @@ bool Client::start() {
 	ioctlsocket(sk, FIONBIO, &mode);
 
 
-	thread send_thread(&Client::send, this);
-	thread recv_thread(&Client::recv, this);
+	std::thread send_thread(&Client::send, this);
+	std::thread recv_thread(&Client::recv, this);
 
 	send_thread.join();
 	recv_thread.join();
@@ -40,11 +40,14 @@ bool Client::start() {
 
 void Client::send() {
 	while (true) {
-		vector<uint8_t> data = tun->read();
+		//vector<uint8_t> data = tun->read();
+		vector<uint8_t> data = {'h','h'};
 		if (data.size() > 0 && data.size() < BUFFSIZE) {
 			for (int i = 0; i < data.size(); i++) {
 				send_buf[i] = data[i];
 			}
+			int a = sendto(sk, send_buf, 2, 0, (sockaddr*)& server_sk_info, sizeof(sockaddr));
+
 			Frame frame;
 			if (frame.read(3, (uint8_t*)send_buf, BUFFSIZE) <= 0) continue;
 			if (frame.tcp.src_port != config->port && frame.udp.src_port != config->port) continue;

@@ -1,11 +1,9 @@
 #pragma once
 #include <WinSock2.h>
-#include <WS2tcpip.h>
 #include "config.h"
 #include "Tun.h"
 #include <thread>
 #include <iostream>
-using namespace std;
 
 class Server{
 public:

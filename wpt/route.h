@@ -4,7 +4,6 @@
 #include <string>
 #include "route.h"
 #include "ethernet/include/util.h"
-using namespace std;
 
 class RouteItem {
 public:
@@ -19,9 +18,9 @@ class Route {
 public:
 	Route();
 
-	vector<RouteItem> routes;
+	std::vector<RouteItem> routes;
 
 public:
 	RouteItem* getRoute(uint32_t dst);
-	string toString();
+	std::string toString();
 };

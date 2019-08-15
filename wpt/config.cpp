@@ -2,11 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-using namespace std;
 using json = nlohmann::json;
 
 Config::Config(string fname) {
-	ifstream infile(fname);
+	std::ifstream infile(fname);
 	json j = json::parse(infile);
 
 	role = j.value("role", "client");
