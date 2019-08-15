@@ -100,7 +100,10 @@ namespace wpt_ui
             {
                 proc.Kill();
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
     }
 }
