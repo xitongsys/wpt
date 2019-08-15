@@ -49,12 +49,9 @@ namespace wpt_ui
 
         public void Assign(Config c)
         {
+            role = c.role;
             server = c.server;
-            dns = c.dns;
-            tun = c.tun;
-            protocol = c.protocol.ToLower();
-            mtu = c.mtu;
-            tokens = c.tokens;
+            port = c.port;
         }
     }
 }
