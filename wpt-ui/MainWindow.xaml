@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:wpt_ui"
         mc:Ignorable="d"
-        Title="MainWindow" Height="237.755" Width="412.245">
+        Title="WPT" Height="237" Width="412" MinHeight="237" MinWidth="412" MaxHeight="237" MaxWidth="412">
     <Grid>
         <Label Content="Role" HorizontalAlignment="Left" Height="28" Margin="10,10,0,0" VerticalAlignment="Top" Width="76"/>
         <ComboBox x:Name="comboRole" HorizontalAlignment="Left" Height="28" Margin="91,10,0,0" VerticalAlignment="Top" Width="299">
-            <ComboBoxItem Content="client" IsSelected="True" />
-            <ComboBoxItem Content="server" />
+            <ComboBoxItem Content="client" IsSelected="True" x:Name="client" />
+            <ComboBoxItem Content="server" x:Name="server"/>
         </ComboBox>
 
         <Label Content="Server" HorizontalAlignment="Left" Height="27" Margin="10,57,0,0" VerticalAlignment="Top" Width="76"/>

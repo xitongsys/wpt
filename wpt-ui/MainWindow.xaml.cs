@@ -45,15 +45,14 @@ namespace wpt_ui
         {
             textServer.Text = cfg.server;
             textPort.Text = cfg.port.ToString();
-            
+
             if (cfg.role.ToLower() == "server")
             {
-                MessageBox.Show(cfg.role);
-                comboRole.SelectedItem = 1;
+                comboRole.SelectedIndex = 1;
             }
             else
             {
-                comboRole.SelectedItem = 0;
+                comboRole.SelectedIndex = 0;
             }
         }
 
