@@ -28,32 +28,6 @@ bool Server::start() {
 		return false;
 	}
 	bind(sk, (sockaddr*)& server_sk_info, sizeof(server_sk_info));
-	len = sizeof(client_sk_info);
-	while (true) {
-		int rl = recvfrom(sk, recv_buf, BUFFSIZE, 0, (sockaddr*)& client_sk_info, &len);
-		if (rl > 0) {
-			std::cout << rl << std::endl;
-			Frame frame;
-			if (frame.read(3, (uint8_t*)recv_buf, rl) <= 0) continue;
-			frame.ipv4.src = config->route.getRoute(frame.ipv4.dst)->addr;
-			if (frame.ipv4.protocol == UDPID) {
-				frame.udp.src_port = config->port;
-			}
-			else if (frame.ipv4.protocol == TCPID) {
-				frame.tcp.src_port = config->port;
-			}
-			else {
-				continue;
-			}
-			int wn = frame.write(3, (uint8_t*)recv_buf, BUFFSIZE);
-
-			vector<uint8_t> data;
-			for (int i = 0; i < wn; i++) {
-				data.push_back(recv_buf[i]);
-			}
-			tun->write(data);
-		}
-	}
 
 	std::thread send_thread(&Server::send, this);
 	std::thread recv_thread(&Server::recv, this);
@@ -83,7 +57,6 @@ void Server::recv() {
 	while (true) {
 		int rl = recvfrom(sk, recv_buf, BUFFSIZE, 0, (sockaddr*)& client_sk_info, &len);
 		if (rl > 0) {
-			std::cout << "fuck" << std::endl;
 			std::cout << rl << std::endl;
 			Frame frame;
 			if (frame.read(3, (uint8_t*)recv_buf, rl) <= 0) continue;
