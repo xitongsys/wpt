@@ -19,8 +19,8 @@ bool Client::start() {
 	int len = sizeof(server_sk_info);
 	memset(&server_sk_info, 0, len);
 	server_sk_info.sin_family = AF_INET;
-	server_sk_info.sin_port = htons(config->udp_port);
-	inet_pton(AF_INET, config->server.c_str(), (void*)& server_sk_info.sin_addr.S_un.S_addr);
+	server_sk_info.sin_port = htons(config->server_port);
+	inet_pton(AF_INET, config->server_ip.c_str(), (void*)& server_sk_info.sin_addr.S_un.S_addr);
 
 	sk = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (sk == SOCKET_ERROR) {

@@ -20,7 +20,7 @@ bool Server::start() {
 	int len = sizeof(server_sk_info);
 	memset(&server_sk_info, 0, len);
 	server_sk_info.sin_family = AF_INET;
-	server_sk_info.sin_port = htons(config->udp_port);
+	server_sk_info.sin_port = htons(config->server_port);
 	server_sk_info.sin_addr.s_addr = INADDR_ANY;
 
 	sk = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);

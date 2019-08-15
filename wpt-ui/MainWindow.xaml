@@ -1,0 +1,23 @@
+﻿<Window x:Class="wpt_ui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:wpt_ui"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="237.755" Width="412.245">
+    <Grid>
+        <Label Content="Role" HorizontalAlignment="Left" Height="28" Margin="10,10,0,0" VerticalAlignment="Top" Width="76"/>
+        <ComboBox x:Name="comboRole" HorizontalAlignment="Left" Height="28" Margin="91,10,0,0" VerticalAlignment="Top" Width="299">
+            <ComboBoxItem Content="client" IsSelected="True"/>
+            <ComboBoxItem Content="server" />
+        </ComboBox>
+        <Label Content="Server" HorizontalAlignment="Left" Height="27" Margin="10,57,0,0" VerticalAlignment="Top" Width="76"/>
+        <TextBox x:Name="textServer" HorizontalAlignment="Left" Height="27" Margin="91,57,0,0" TextWrapping="Wrap" Text="0.0.0.0:2222" VerticalAlignment="Top" Width="299"/>
+        <Label Content="Port" HorizontalAlignment="Left" Height="27" Margin="10,102,0,0" VerticalAlignment="Top" Width="76"/>
+        <TextBox x:Name="textPort" HorizontalAlignment="Left" Height="27" Margin="91,102,0,0" TextWrapping="Wrap" Text="3389" VerticalAlignment="Top" Width="299"/>
+        <Button x:Name="buttonStart" Content="Start" HorizontalAlignment="Left" Height="38" Margin="10,146,0,0" VerticalAlignment="Top" Width="98" Click="Button_Click_Start"/>
+        <Button x:Name="buttonStop" Content="Stop" HorizontalAlignment="Left" Height="38" Margin="154,146,0,0" VerticalAlignment="Top" Width="98" Click="Button_Click_Stop"/>
+        <Button x:Name="buttonAbout" Content="About" HorizontalAlignment="Left" Height="38" Margin="292,146,0,0" VerticalAlignment="Top" Width="98" Click="Button_Click_About"/>
+    </Grid>
+</Window>

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 #include "json.hpp"
 #include "route.h"
@@ -11,8 +10,8 @@ public:
 
 	string role;
 	int port;
-	int udp_port;
-	string server;
+	string server_ip;
+	int server_port;
 
 	int if_index;
 
