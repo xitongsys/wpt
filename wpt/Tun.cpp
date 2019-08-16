@@ -51,10 +51,7 @@ bool Tun::write(vector<uint8_t>& data, int isout) {
 }
 
 bool Tun::start() {
-	char fmt[] = "(localPort == %d or remotePort == %d) and !impostor";
-	char filter[1024];
-	sprintf_s(filter, 1024, fmt, config->port, config->port);
-	handle = WinDivertOpen(filter, WINDIVERT_LAYER_NETWORK, 0, 0);
+	handle = WinDivertOpen(config->filter.c_str(), WINDIVERT_LAYER_NETWORK, 0, 0);
 	return !(handle == INVALID_HANDLE_VALUE);
 }
 

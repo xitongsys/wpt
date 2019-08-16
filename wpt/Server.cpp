@@ -45,7 +45,6 @@ void Server::send() {
 			}
 			Frame frame;
 			if (frame.read(3, (uint8_t*)send_buf, BUFFSIZE) <= 0) continue;
-			if (frame.tcp.dst_port != config->port && frame.udp.dst_port != config->port) continue;
 			int wn = frame.write(3, (uint8_t*)send_buf, BUFFSIZE);
 			int sn = sendto(sk, send_buf, wn, 0, (sockaddr*)& client_sk_info, sizeof(sockaddr));
 		}
@@ -59,25 +58,50 @@ void Server::recv() {
 		if (rl > 0) {
 			Frame frame;
 			if (frame.read(3, (uint8_t*)recv_buf, rl) <= 0) continue;
-			frame.ipv4.src = config->route.getRoute(frame.ipv4.dst)->addr;
 
-			if (frame.ipv4.protocol == UDPID) {
-				frame.udp.src_port = config->port;
+			if (config->direction == 0) {//client->server
+				frame.ipv4.src = config->route.getRoute(frame.ipv4.dst)->addr;
+
+				if (frame.ipv4.protocol == UDPID) {
+					if (config->client2server.find(frame.udp.src_port) == config->client2server.end()) continue;
+					frame.udp.src_port = config->client2server[frame.udp.src_port];
+				}
+				else if (frame.ipv4.protocol == TCPID) {
+					if (config->client2server.find(frame.tcp.src_port) == config->client2server.end()) continue;
+					frame.tcp.src_port = config->client2server[frame.tcp.src_port];
+				}
+				else {
+					continue;
+				}
 			}
-			else if (frame.ipv4.protocol == TCPID) {
-				frame.tcp.src_port = config->port;
+			else {//server->client
+				frame.ipv4.dst = config->route.getRoute(client_sk_info.sin_addr.s_addr)->addr;
+				
+				if (frame.ipv4.protocol == UDPID) {
+					if (config->client2server.find(frame.udp.dst_port) == config->client2server.end()) continue;
+					frame.udp.dst_port = config->client2server[frame.udp.dst_port];
+				}
+				else if (frame.ipv4.protocol == TCPID) {
+					if (config->client2server.find(frame.tcp.dst_port) == config->client2server.end()) continue;
+					frame.tcp.dst_port = config->client2server[frame.tcp.dst_port];
+				}
+				else {
+					continue;
+				}
 			}
-			else {
-				continue;
-			}
+
+			
 			int wn = frame.write(3, (uint8_t*)recv_buf, BUFFSIZE);
-
 			vector<uint8_t> data;
 			for (int i = 0; i < wn; i++) {
 				data.push_back(recv_buf[i]);
 			}
-
-			tun->write(data, 1);
+			if (config->direction == 0) {//client->server
+				tun->write(data, 1);
+			}
+			else {//server->client
+				tun->write(data, 0);
+			}
 		}
 	}
 }

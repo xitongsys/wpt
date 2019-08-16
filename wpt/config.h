@@ -9,7 +9,13 @@ public:
 	Config(string fname);
 
 	string role;
-	int port;
+	std::vector<int> client_tun_ports;
+	std::vector<int> server_tun_ports;
+	std::map<int,int> client2server;
+	std::map<int,int> server2client;
+	int direction;//0: client->server, 1: server->client
+	string filter;
+
 	string server_ip;
 	int server_port;
 
