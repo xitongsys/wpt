@@ -4,7 +4,7 @@ WPT(windows port tunnel) is a windows port remote mapping programs.
 * Mapping your local port to a public server.
 * Mapping a public server port to your local host.
 
-[Mechanism]()
+[Mechanism](https://github.com/xitongsys/wpt/blob/master/mechanism.jpg?raw=true)
 
 ## Quick start
 
