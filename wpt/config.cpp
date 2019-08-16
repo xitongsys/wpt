@@ -38,28 +38,50 @@ Config::Config(string fname) {
 	gateway = route.getRoute(str2ip(server_ip));
 	if_index = gateway->ifIndex;
 
-	if (role == "client") {
-		filter = "!impostor and ( ";
-		for (int i = 0; i < client_tun_ports.size(); i++) {
-			int p = client_tun_ports[i];
-			if (i > 0) filter += " or ";
-			filter += "localPort == " + std::to_string(p) + " ";
+	if (direction == 0) {
+		if (role == "client") {
+			filter = "!impostor and ( ";
+			for (int i = 0; i < client_tun_ports.size(); i++) {
+				int p = client_tun_ports[i];
+				if (i > 0) filter += " or ";
+				filter += "tcp.SrcPort == " + std::to_string(p) + " or " + "udp.SrcPort == " + std::to_string(p) + " ";
+			}
+			filter += ")";
 		}
-		filter += ")";
+		else {
+			filter = "!impostor and ( ";
+			for (int i = 0; i < server_tun_ports.size(); i++) {
+				int p = server_tun_ports[i];
+				if (i > 0) filter += " or ";
+				filter += "tcp.DstPort == " + std::to_string(p) + " or " + "udp.DstPort == " + std::to_string(p) + " ";
+			}
+			filter += ")";
+		}
 	}
-	else {
-		filter = "!impostor and ( ";
-		for (int i = 0; i < server_tun_ports.size(); i++) {
-			int p = server_tun_ports[i];
-			if (i > 0) filter += " or ";
-			filter += "localPort == " + std::to_string(p) + " ";
+	else {//server->client
+		if (role == "client") {
+			filter = "!impostor and ( ";
+			for (int i = 0; i < client_tun_ports.size(); i++) {
+				int p = client_tun_ports[i];
+				if (i > 0) filter += " or ";
+				filter += "tcp.DstPort == " + std::to_string(p) + " or " + "udp.DstPort == " + std::to_string(p) + " ";
+			}
+			filter += ")";
 		}
-		filter += ")";
+		else {
+			filter = "!impostor and ( ";
+			for (int i = 0; i < server_tun_ports.size(); i++) {
+				int p = server_tun_ports[i];
+				if (i > 0) filter += " or ";
+				filter += "tcp.SrcPort == " + std::to_string(p) + " or " + "udp.SrcPort == " + std::to_string(p) + " ";
+			}
+			filter += ")";
+		}
 	}
 }
 
 string Config::to_string() {
-	char fmt[] = "role: %s\nserver: %s:%d\nclient_tun_ports: %s\nserver_tun_ports: %s\nfilter: %s\n";
+	char fmt[] = "role: %s\nserver: %s:%d\nclient_tun_ports: %s\nserver_tun_ports: %s\ndirection: %d\nfilter: %s\n";
 	char buf[4096];
 	string cports;
 	for (int i = 0; i < client_tun_ports.size(); i++) {
@@ -71,7 +93,7 @@ string Config::to_string() {
 		if (i > 0) sports += ", ";
 		sports += std::to_string(server_tun_ports[i]);
 	}
-	sprintf_s(buf, 4096, fmt, role.c_str(), server_ip.c_str(), server_port, cports.c_str(), sports.c_str(), filter.c_str());
+	sprintf_s(buf, 4096, fmt, role.c_str(), server_ip.c_str(), server_port, cports.c_str(), sports.c_str(), direction, filter.c_str());
 	return buf;
 }
 

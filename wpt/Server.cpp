@@ -39,6 +39,7 @@ bool Server::start() {
 void Server::send() {
 	while (true) {
 		vector<uint8_t> data = tun->read();
+		std::cout << "tun read" << data.size() << std::endl;
 		if (data.size() > 0 && data.size() < BUFFSIZE) {
 			for (int i = 0; i < data.size(); i++) {
 				send_buf[i] = data[i];
@@ -47,6 +48,8 @@ void Server::send() {
 			if (frame.read(3, (uint8_t*)send_buf, BUFFSIZE) <= 0) continue;
 			int wn = frame.write(3, (uint8_t*)send_buf, BUFFSIZE);
 			int sn = sendto(sk, send_buf, wn, 0, (sockaddr*)& client_sk_info, sizeof(sockaddr));
+
+			std::cout << "send to client: " << sn << std::endl;
 		}
 	}
 }
@@ -55,9 +58,14 @@ void Server::recv() {
 	int len = sizeof(client_sk_info);
 	while (true) {
 		int rl = recvfrom(sk, recv_buf, BUFFSIZE, 0, (sockaddr*)& client_sk_info, &len);
+		std::cout << "=====" << rl << std::endl;
 		if (rl > 0) {
 			Frame frame;
+			std::cout << "recv data: " << rl << std::endl;
 			if (frame.read(3, (uint8_t*)recv_buf, rl) <= 0) continue;
+
+			std::cout << "recv from client: " << rl << std::endl;
+			std::cout << frame.ipv4.to_string() << frame.udp.to_string() << std::endl;
 
 			if (config->direction == 0) {//client->server
 				frame.ipv4.src = config->route.getRoute(frame.ipv4.dst)->addr;
@@ -90,6 +98,8 @@ void Server::recv() {
 				}
 			}
 
+			std::cout << "nat: " << rl << std::endl;
+			std::cout << frame.ipv4.to_string() << frame.udp.to_string() << std::endl;
 			
 			int wn = frame.write(3, (uint8_t*)recv_buf, BUFFSIZE);
 			vector<uint8_t> data;
