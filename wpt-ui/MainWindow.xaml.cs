@@ -87,7 +87,7 @@ namespace wpt_ui
                 if(c>0 && s>0 && c<65536 && s < 65536)
                 {
                     cfg.client_tun_ports.Add(c);
-                    cfg.server_tun_ports.Add(c);
+                    cfg.server_tun_ports.Add(s);
                 }
             }
         }
