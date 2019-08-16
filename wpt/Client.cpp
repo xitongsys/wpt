@@ -59,7 +59,7 @@ void Client::send() {
 			int wn = frame.write(3, (uint8_t*)send_buf, BUFFSIZE);
 			sendto(sk, send_buf, wn, 0, (sockaddr*)& server_sk_info, sizeof(sockaddr));
 
-			std::cout << "tun read: " << frame.ipv4.to_string() << frame.udp.to_string() << std::endl;
+			//std::cout << "tun read: " << frame.ipv4.to_string() << frame.udp.to_string() << std::endl;
 		}
 	}
 }
@@ -72,7 +72,7 @@ void Client::recv() {
 			Frame frame;
 			if (frame.read(3, (uint8_t*)recv_buf, rl) <= 0) continue;
 
-			std::cout << "recv " << frame.ipv4.to_string() << frame.udp.to_string() << std::endl;
+			//std::cout << "recv " << frame.ipv4.to_string() << frame.udp.to_string() << std::endl;
 
 			if (config->direction == 0) {//client->server
 				frame.ipv4.dst = config->gateway->addr;
@@ -105,7 +105,7 @@ void Client::recv() {
 				}
 			}
 
-			std::cout << "nat " << frame.ipv4.to_string() << frame.udp.to_string() << std::endl;
+			//std::cout << "nat " << frame.ipv4.to_string() << frame.udp.to_string() << std::endl;
 
 			int wn = frame.write(3, (uint8_t*)recv_buf, BUFFSIZE);
 			vector<uint8_t> data;
