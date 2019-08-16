@@ -1,6 +1,6 @@
 {
     "role": "client",
-    "server": "10.172.116.96:22222",
+    "server": "0.0.0.0:22222",
 	"direction": 0,
 	"client_tun_ports": [1111, 1112],
 	"server_tun_ports": [11111, 11122]
