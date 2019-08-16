@@ -5,19 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:wpt_ui"
         mc:Ignorable="d"
-        Title="WPT" Height="237" Width="412" MinHeight="237" MinWidth="412" MaxHeight="237" MaxWidth="412">
+        Title="WPT" Height="500" Width="415" MinHeight="500" MinWidth="415" MaxHeight="500" MaxWidth="415">
     <Grid>
         <Label Content="Role" HorizontalAlignment="Left" Height="28" Margin="10,10,0,0" VerticalAlignment="Top" Width="76"/>
-        <ComboBox x:Name="comboRole" HorizontalAlignment="Left" Height="28" Margin="91,10,0,0" VerticalAlignment="Top" Width="299">
+        <ComboBox x:Name="comboRole" HorizontalAlignment="Left" Height="28" Margin="91,10,0,0" VerticalAlignment="Top" Width="300">
             <ComboBoxItem Content="client" IsSelected="True" x:Name="client" />
             <ComboBoxItem Content="server" x:Name="server"/>
         </ComboBox>
 
         <Label Content="Server" HorizontalAlignment="Left" Height="27" Margin="10,57,0,0" VerticalAlignment="Top" Width="76"/>
-        <TextBox x:Name="textServer" HorizontalAlignment="Left" Height="27" Margin="91,57,0,0" TextWrapping="Wrap" Text="0.0.0.0:2222" VerticalAlignment="Top" Width="299"/>
-        <Label Content="Port" HorizontalAlignment="Left" Height="27" Margin="10,102,0,0" VerticalAlignment="Top" Width="76"/>
-        <TextBox x:Name="textPort" HorizontalAlignment="Left" Height="27" Margin="91,102,0,0" TextWrapping="Wrap" Text="3389" VerticalAlignment="Top" Width="299"/>
-        <Button x:Name="buttonStart" Content="Start" HorizontalAlignment="Left" Height="38" Margin="10,146,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click_Start"/>
-        <Button x:Name="buttonStop" Content="Stop" HorizontalAlignment="Left" Height="38" Margin="231,146,0,0" VerticalAlignment="Top" Width="159" Click="Button_Click_Stop"/>
+        <TextBox x:Name="textServer" HorizontalAlignment="Left" Height="27" Margin="91,57,0,0" TextWrapping="Wrap" Text="0.0.0.0:2222" VerticalAlignment="Top" Width="300"/>
+        <Label Content="Tun Ports" HorizontalAlignment="Left" Height="27" Margin="10,148,0,0" VerticalAlignment="Top" Width="76" />
+        <Button x:Name="buttonStart" Content="Start" HorizontalAlignment="Left" Height="38" Margin="10,403,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click_Start"/>
+        <Button x:Name="buttonStop" Content="Stop" HorizontalAlignment="Left" Height="38" Margin="231,403,0,0" VerticalAlignment="Top" Width="159" Click="Button_Click_Stop"/>
+        <ListView x:Name="listViewTunPorts" HorizontalAlignment="Left" Height="198" Margin="10,183,0,0" VerticalAlignment="Top" Width="380">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="client" Width="180">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Name="client" Text="{Binding client}" Width="160" BorderThickness="0"></TextBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="server" Width="180">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Name="server" Text="{Binding server}" Width="160" BorderThickness="0"></TextBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="Direction" HorizontalAlignment="Left" Height="27" Margin="10,103,0,0" VerticalAlignment="Top" Width="76" RenderTransformOrigin="0.487,-0.163"/>
+        <ComboBox x:Name="comboDirection" HorizontalAlignment="Left" Height="28" Margin="91,105,0,0" VerticalAlignment="Top" Width="300">
+            <ComboBoxItem Content="client to server" IsSelected="True" x:Name="c2s"/>
+            <ComboBoxItem Content="server to client" x:Name="s2c"/>
+        </ComboBox>
+        <Button x:Name="buttonAddTunPort"  Content="add" HorizontalAlignment="Left" Height="20" Margin="353,158,0,0" VerticalAlignment="Top" Width="37" Click="ButtonAddTunPort_Click"/>
     </Grid>
 </Window>

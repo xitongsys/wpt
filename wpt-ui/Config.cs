@@ -17,13 +17,19 @@ namespace wpt_ui
         [DataMember]
         public string server;
         [DataMember]
-        public int port;
+        public ArrayList client_tun_ports;
+        [DataMember]
+        public ArrayList server_tun_ports;
+        [DataMember]
+        public int direction;
 
         public Config()
         {
             role = "client";
             server = "0.0.0.0:2222";
-            port = 3389;
+            direction = 0;
+            client_tun_ports = new ArrayList();
+            server_tun_ports = new ArrayList();
         }
 
         public void ReadConfig()
@@ -51,7 +57,9 @@ namespace wpt_ui
         {
             role = c.role;
             server = c.server;
-            port = c.port;
+            direction = c.direction;
+            client_tun_ports = c.client_tun_ports;
+            server_tun_ports = c.server_tun_ports;
         }
     }
 }

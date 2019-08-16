@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,12 @@ namespace wpt_ui
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+    public class TunPortItems
+    {
+        public int client { get; set; }
+        public int server { get; set; }
+    }
     public partial class MainWindow : Window
     {
         public Config cfg;
@@ -44,7 +51,6 @@ namespace wpt_ui
         public void LoadConfigToUI()
         {
             textServer.Text = cfg.server;
-            textPort.Text = cfg.port.ToString();
 
             if (cfg.role.ToLower() == "server")
             {
@@ -54,13 +60,36 @@ namespace wpt_ui
             {
                 comboRole.SelectedIndex = 0;
             }
+
+
+            comboDirection.SelectedIndex = cfg.direction;
+            
+            for(int i=0; i<cfg.client_tun_ports.Count && i<cfg.server_tun_ports.Count; i++)
+            {
+                int c = (int)cfg.client_tun_ports[i], s = (int)cfg.server_tun_ports[i];
+                listViewTunPorts.Items.Add(new TunPortItems { client = c, server = s });
+            }
+
         }
 
         public void LoadUItoConfig()
         {
             cfg.server = textServer.Text;
             cfg.role = ((ComboBoxItem)comboRole.SelectedItem).Content.ToString().ToLower();
-            cfg.port = Int32.Parse(textPort.Text);
+            cfg.direction = comboDirection.SelectedIndex;
+            int pn = listViewTunPorts.Items.Count;
+            cfg.client_tun_ports.Clear();
+            cfg.server_tun_ports.Clear();
+            for (int i = 0; i < pn; i++)
+            {
+                var it = listViewTunPorts.Items[i] as TunPortItems;
+                int c = it.client, s = it.server;
+                if(c>0 && s>0 && c<65536 && s < 65536)
+                {
+                    cfg.client_tun_ports.Add(c);
+                    cfg.server_tun_ports.Add(c);
+                }
+            }
         }
 
         public Process proc;
@@ -103,6 +132,11 @@ namespace wpt_ui
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void ButtonAddTunPort_Click(object sender, RoutedEventArgs e)
+        {
+            listViewTunPorts.Items.Add(new TunPortItems { client = 0, server = 0 });
         }
     }
 }
